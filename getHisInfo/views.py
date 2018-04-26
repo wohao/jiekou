@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import json
 import pymysql
-
+   
 
 his_table={
 "hisId":"hisId",
@@ -95,9 +95,10 @@ def getHisInfo(request):
 	cursor.close()
 	conn.close()
 
-	rJsonData={}
-	rExanitems={}
+	rJsonDatas=[]
 	for i in datas:
+		rExanitems={}
+		rJsonData={}
 		for yizhen_name,his_name in his_table.items():
 			for name ,value in i.items():
 				if name == his_name:
@@ -110,15 +111,17 @@ def getHisInfo(request):
 				if name == "extNo":
 					rExanitems["extNo"]= value
 
-	btable=[rExanitems]
-	rJsonData["checkItemName"]=btable
-	ctable = [rJsonData]
+		btable=[rExanitems]
+		rJsonData["checkItemName"]=btable
+		#rJsonDatas = [rJsonData]
+		#print(type(ctable))
+		rJsonDatas.append(rJsonData)
 
 	length = len(datas)
 	sResultDetail="共查询到 {} 条记录".format(length)
 	rJsonObject={}
 	rJsonObject["resultCode"]=0
-	rJsonObject["resultDatas"]=ctable
+	rJsonObject["resultDatas"]=rJsonDatas
 	rJsonObject["resultDetail"]=sResultDetail
 
 
